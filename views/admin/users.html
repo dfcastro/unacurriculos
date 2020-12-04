@@ -37,7 +37,7 @@
                   {loop="$users"}
                   <tr>
                     <td>{$value.iduser}</td>
-                    <td>{$value.desperson}</td>
+                    <td>{function="utf8_decode($value.desperson)"}</td>
                     <td>{$value.desemail}</td>
                     <td>{$value.destypeuser}</td>
                     <td>

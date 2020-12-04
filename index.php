@@ -64,7 +64,7 @@ $app->get("/admin/users", function()
 	User::verifyLogin();
 
 	$users= User::listAll();
-
+	
 	$page= new PageAdmin();
 
 	$page->setTpl("users", [
@@ -149,9 +149,9 @@ $app->post("/admin/users/create", function()
 	}*/
 
 	$user = new User();
-
+	//$_POST['desperson'] = utf8_encode($_POST['desperson']);
 	$user->setData($_POST);
-
+	
 	$user->save();
 
 	header("Location: /admin/users/create");

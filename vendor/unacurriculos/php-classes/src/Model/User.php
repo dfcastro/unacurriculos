@@ -79,10 +79,14 @@ class User extends Model {
 	{
 		$sql = new Sql();
 
-		return $sql->select("SELECT * FROM tb_users a INNER JOIN tb_persons b USING(idperson)
+		$results= $sql->select("SELECT * FROM tb_users a INNER JOIN tb_persons b USING(idperson)
 		INNER JOIN tb_typeusers c using(idtypeuser)
 		 ORDER BY b.desperson;");
-			}
+
+	
+
+		return $results;
+	}
 
 	public function get($iduser)
 	{
@@ -95,17 +99,19 @@ class User extends Model {
 
 		$data = $results[0];
 
-		$data['desperson'] = utf8_encode($data['desperson']);
+		$data['desperson'] = utf8_decode($data['desperson']);
 
 
 		$this->setData($data);
 
 	}
+
+
 	public function save()
 	{
 		$sql = new Sql();
 		$results = $sql->select("CALL sp_users_save(:desperson, :idtypeuser, :despassword, :desemail, :nrphone)", [
-			":desperson" => utf8_decode($this->getdesperson()),
+			":desperson" => utf8_encode($this->getdesperson()),
 			":idtypeuser" =>$this->getidtypeuser(),
 			":despassword"=>User::getPasswordHash($this->getdespassword()),
 			":desemail" =>$this->getdesemail(),
