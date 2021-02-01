@@ -18,8 +18,9 @@
         </div>
         <!-- /.box-header -->
         <!-- form start -->
-        <form role="form" action="/admin/users/{$user.iduser}" method="post">
+        <form id="userUpdate" role="form" method="post">
           <div class="box-body">
+            <span id="msgError"></span>
             <div class="form-group">
               <label for="desperson">Nome</label>
               <input type="text" class="form-control" id="desperson" name="desperson" placeholder="Digite o nome" value="{$user.desperson}">
@@ -43,8 +44,29 @@
           </div>
           <!-- /.box-body -->
           <div class="box-footer">
-            <button type="submit" class="btn btn-primary">Salvar</button>
+            <button type="submit"  class="btn btn-primary">Salvar</button>
           </div>
+
+            <!-- Modal -->
+            <div class="modal fade bd-example-modal-sm" id="modalSuccessUpdate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Mensagem</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body bg-success">
+                    Alteração realizada com sucesso!
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">OK!</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+             <!-- FIM Modal -->
         </form>
       </div>
   	</div>
@@ -54,3 +76,55 @@
 <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+<script>
+
+  $('#userUpdate').on('submit', function(event)
+  {
+    event.preventDefault();
+    if($('#desperson').val() == "")
+    {
+      //Alerta de campo nome vazio
+      $("#msgError").html('<div class="alert alert-danger" role="alert">Necessário preencher o campo nome!</div> ');
+    }
+    else if($('#desemail').val() == "")
+         {
+            //Alerta de campo email vazio
+            $("#msgError").html('<div class="alert alert-danger" role="alert">Necessário prencher o campo e-mail!</div>');						
+          }
+            else if($('#nrphone').val() == "")
+            {
+              //Alerta de campo telefone vazio
+              $("#msgError").html('<div class="alert alert-danger" role="alert">Necessário prencher o campo telefone!</div>');	
+             }
+                else 
+                  {
+                      //Receber os dados do formulário
+                      
+                      var dados = $("#userUpdate").serialize();
+                      $.post("/admin/users/{$user.iduser}", dados, function (retorna)
+                      {
+                        if(retorna)
+                        {
+                          
+                         
+                            
+                              //Limpar mensagem de erro
+                              $("#msgError").html('');	
+                              //Alerta de cadastro realizado com sucesso
+                              //$("#msg").html('<div class="alert alert-success" role="alert">Usuário cadastrado com sucesso!</div>'); 
+                               
+                              $('#userUpdate')[0].reset();
+
+                              $('#modalSuccessUpdate').modal('show');  
+                              $('#modalSuccessUpdate').on('hidden.bs.modal', function (e) {
+                                window.location.href = "/admin/users/{$user.iduser}";
+                              })                           
+                                              
+                         }
+                          else{
+
+                              }
+                      });
+                    }
+  });
+  </script>

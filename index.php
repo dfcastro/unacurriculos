@@ -80,6 +80,7 @@ $app->get("/admin/users/create", function()
 
 	$page->setTpl("users-create",[
 		"typeuser"=>TypeUser::listAll(),
+		"errorMsg"=>User::getErrorRegister()
 		
 	]);
 });
@@ -109,6 +110,7 @@ $app->get("/admin/users/:iduser", function($iduser)
 	$page->setTpl("users-update",array(
 		"user"=>$user->getValues(),
 		"typeuser"=>TypeUser::listAll()
+	
 	));
 
 });
@@ -119,9 +121,9 @@ $app->post("/admin/users/create", function()
 
 	User::verifyLogin();
 
-	/* if(!isset($_POST['desperson']) || $_POST['desperson'] === '')
+	 if(!isset($_POST['desperson']) || $_POST['desperson'] === '')
 	{
-		User::setErrorRegister("Confirme corretamente as senhas.");
+		User::setErrorRegister("Preencha o campo nome de usuário.");
 		header("Location: /admin/users/create");
 		exit;
 	} else if(!isset($_POST['desemail']) || $_POST['desemail'] === '')
@@ -131,31 +133,39 @@ $app->post("/admin/users/create", function()
 		exit;
 	}else if(!isset($_POST['despassword']) || $_POST['despassword'] === '')
 	{
-		User::setErrorRegister("Confirme corretamente as senhas.");
+		User::setErrorRegister("Preencha o campo senha.");
 		header("Location: /admin/users/create");
 		exit;
 	}else if(!isset($_POST['despassword-confirm']) || $_POST['despassword-confirm'] === '')
 	{
-		User::setErrorRegister("Confirme corretamente as senhas.");
+		User::setErrorRegister("Preencha o campo confirme a senha.");
 		header("Location: /admin/users/create");
 		exit;
 	}else if(($_POST["despassword"]) !== $_POST["despassword-confirm"] )
 	{
-		User::setErrorRegister("Confirme corretamente as senhas.");
+		User::setErrorRegister("Preencha o campo senha e confirme senha igualmente.");
 		header("Location: /admin/users/create");
 		exit;
-	}else{
-		User::setModalUser("#modalSuccess");
-	}*/
+	}
 
 	$user = new User();
 	//$_POST['desperson'] = utf8_encode($_POST['desperson']);
-	$user->setData($_POST);
-	
-	$user->save();
 
-	header("Location: /admin/users/create");
-	exit;
+
+
+	$user->setData($_POST);
+
+	
+		if($user->checkLoginExist($_POST['desemail'])){
+			User::setErrorRegister("Email de usuário já cadastrado.");
+			header("Location: /admin/users/create");
+			exit;
+		}
+	
+		$user->save();
+		header("Location: /admin/users/create");
+		exit;
+		
 });
 
 

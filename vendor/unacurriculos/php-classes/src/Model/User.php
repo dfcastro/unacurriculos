@@ -83,8 +83,6 @@ class User extends Model {
 		INNER JOIN tb_typeusers c using(idtypeuser)
 		 ORDER BY b.desperson;");
 
-	
-
 		return $results;
 	}
 
@@ -106,7 +104,6 @@ class User extends Model {
 
 	}
 
-
 	public function save()
 	{
 		$sql = new Sql();
@@ -117,8 +114,7 @@ class User extends Model {
 			":desemail" =>$this->getdesemail(),
 			":nrphone" =>$this->getnrphone()
 		]);
-		var_dump($results);
-		exit;
+
 		$this->setData($results[0]);
 	}
 
@@ -129,7 +125,7 @@ class User extends Model {
 
 	$results = $sql->select("CALL sp_usersupdate_save(:iduser, :desperson, :idtypeuser, :despassword, :desemail, :nrphone)", [
 			":iduser"=>$this->getiduser(),
-			":desperson" => utf8_decode($this->getdesperson()),
+			":desperson" => utf8_encode($this->getdesperson()),
 			":idtypeuser" =>$this->getidtypeuser(),
 			":despassword"=>User::getPasswordHash($this->getdespassword()),
 			":desemail" =>$this->getdesemail(),
@@ -219,7 +215,11 @@ class User extends Model {
 		]);
 		//var_dump($results);
 		//exit;
-		return (count($results) > 0);
+		if(isset($results)){
+			return true;
+		}else{
+			return false;
+		}
 
 	}
 

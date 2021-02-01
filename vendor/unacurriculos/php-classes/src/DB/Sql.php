@@ -5,8 +5,8 @@ namespace Unacurriculos\DB;
 class Sql {
 
 	const HOSTNAME = "127.0.0.1";
-	const USERNAME = "root";
-	const PASSWORD = "root";
+	const USERNAME = 'root';
+	const PASSWORD = '';
 	const DBNAME = "db_unacurriculos";
 
 	private $conn;

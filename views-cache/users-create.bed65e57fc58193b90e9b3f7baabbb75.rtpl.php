@@ -23,7 +23,12 @@
         </div>
         <!-- /.box-header -->
         <!-- form start -->
-        <form id="usersCreate"  role="form" method="post">
+        <form id="usersCreate" action="/admin/users/create" role="form" method="post">
+          <?php if( $errorMsg != '' ){ ?>
+          <div class="alert alert-danger">
+              <?php echo htmlspecialchars( $errorMsg, ENT_COMPAT, 'UTF-8', FALSE ); ?>
+          </div>
+          <?php } ?>
           <div class="box-body">
        
               <span id="msgError"></span>
@@ -53,12 +58,13 @@
             </div>
             <div class="form-group">
               <label for="despasswordConfirm">Confirme sua senha</label>
-              <input type="password" class="form-control" id="despasswordConfirm" name="despasswordConfirm" placeholder="Confirme sua senha" required>
+              <input type="password" class="form-control" id="despassword-confirm" name="despassword-confirm" placeholder="Confirme sua senha" required>
             </div>
           </div>
           <!-- /.box-body -->
           <div class="box-footer">
             <button  type="submit" class="btn btn-success"  >Cadastrar</button>
+          </div>         
             <!-- Modal -->
             <div class="modal fade bd-example-modal-sm" id="modalSuccess" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog" role="document">
@@ -91,63 +97,3 @@
 </div>
 <!-- /.content-wrapper -->
 
-<script>
-
-  $('#usersCreate').on('submit', function(event)
-  {
-    event.preventDefault();
-    if($('#desperson').val() == "")
-    {
-      //Alerta de campo nome vazio
-      $("#msgError").html('<div class="alert alert-danger" role="alert">Necessário prencher o campo nome!</div> ');
-    }
-    else if($('#desemail').val() == "")
-         {
-            //Alerta de campo email vazio
-            $("#msgError").html('<div class="alert alert-danger" role="alert">Necessário prencher o campo e-mail!</div>');						
-          }
-            else if($('#nrphone').val() == "")
-            {
-              //Alerta de campo telefone vazio
-              $("#msgError").html('<div class="alert alert-danger" role="alert">Necessário prencher o campo telefone!</div>');	
-             }
-              else if($('#despassword').val() == "")
-              {
-                //Alerta de campo senha vazio
-                $("#msgError").html('<div class="alert alert-danger" role="alert">Necessário prencher o campo senha!!</div>');
-              }
-                else if($('#despasswordConfirm').val() == "")
-                {
-                  //Alerta de campo telefone vazio
-                  $("#msgError").html('<div class="alert alert-danger" role="alert">Necessário prencher o campo confirme senha!</div>');									
-                }
-                else if($('#despassword').val() !== $('#despasswordConfirm').val()){
-                  //Alerta de campo telefone vazio
-                  $("#msgError").html('<div class="alert alert-danger" role="alert">Necessário que o campo senha e confirme senha sejam iguais!</div>');			
-                }
-                else 
-                  {
-                      //Receber os dados do formulário
-                      
-                      var dados = $("#usersCreate").serialize();
-                      $.post("/admin/users/create", dados, function (retorna)
-                      {
-                        if(retorna)
-                        {
-                          
-                              //Limpar os campo
-                              $('#usersCreate')[0].reset();
-                              
-                              //Limpar mensagem de erro
-                              $("#msgError").html('');	
-                              //Alerta de cadastro realizado com sucesso
-                              //$("#msg").html('<div class="alert alert-success" role="alert">Usuário cadastrado com sucesso!</div>'); 
-                              $('#modalSuccess').modal('show');                     
-                         }
-                          else{
-
-                              }
-                      });
-                    }
-  });
-  </script>
