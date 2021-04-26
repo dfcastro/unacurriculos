@@ -8,9 +8,11 @@ use \Unacurriculos\DB\Sql;
 class User extends Model {
 
 	const SESSION = "User";
-	const ERROR_REGISTER = "UserErrorRegister";
+	const ERROR = "UserError";
 	const SUCCESS = "UserSucesss";
-	const MODAL = "ModalUser";
+	const USERDESPERSONFORM = "UserDespersonForm";
+	const USERNRPHONEFORM = "UserNrPhoneForm";
+	const USERDESEMAILFORM = "UserDesemailForm";
 
 	protected $fields = [
 		"iduser", "idperson", "idtypeuser", "desemail", "despassword", "dtregister"
@@ -180,72 +182,123 @@ class User extends Model {
 
 	}
 
-	public static function setErrorRegister($msg)
+	public static function setError($msg)
 	{
 
-		$_SESSION[User::ERROR_REGISTER] = $msg;
+		$_SESSION[User::ERROR] = $msg;
 
 	}
 
-	public static function getErrorRegister()
+	public static function getError()
 	{
 
-		$msg = (isset($_SESSION[User::ERROR_REGISTER]) && $_SESSION[User::ERROR_REGISTER]) ? $_SESSION[User::ERROR_REGISTER] : '';
+		$msg = (isset($_SESSION[User::ERROR]) && $_SESSION[User::ERROR]) ? $_SESSION[User::ERROR] : '';
 
-		User::clearErrorRegister();
+		User::clearError();
 
 		return $msg;
 
 	}
 
-	public static function clearErrorRegister()
+	public static function clearError()
 	{
 
-		$_SESSION[User::ERROR_REGISTER] = NULL;
+		$_SESSION[User::ERROR] = NULL;
 
 	}
 
-	public static function checkLoginExist($login)
+	public static function checkLoginExist($desemail)
 	{
 
 		$sql = new Sql();
 
-		$results = $sql->select("SELECT * FROM tb_users WHERE deslogin = :deslogin", [
-			':deslogin'=>$login
+		$results = $sql->select("SELECT * FROM tb_persons WHERE desemail = :desemail", [
+			':desemail'=>$desemail
 		]);
 		//var_dump($results);
 		//exit;
-		if(isset($results)){
-			return true;
-		}else{
+		if(count($results) === 0){
 			return false;
+		}else{
+			return true;
 		}
 
 	}
 
 
-	public static function setModalUser($modal)
+
+	public static function setUserDespersonForm($UserDespersonForm)
 	{
 
-		$_SESSION[User::MODAL] = $modal;
+		$_SESSION[User::USERDESPERSONFORM] = $UserDespersonForm;
 
 	}
 
-	public static function getModalUser()
+	public static function getUserDespersonForm()
 	{
 
-		$modal = (isset($_SESSION[User::MODAL]) && $_SESSION[User::MODAL]) ? $_SESSION[User::MODAL] : '';
+		$userDespersonForm = (isset($_SESSION[User::USERDESPERSONFORM]) && $_SESSION[User::USERDESPERSONFORM]) ? $_SESSION[User::USERDESPERSONFORM] : '';
 
-		User::clearModalUser();
+		User::clearUserDespersonForm();
 
-		return $modal;
+		return $userDespersonForm;
 
 	}
 
-	public static function clearModalUser()
+	public static function clearUserDespersonForm()
 	{
 
-		$_SESSION[User::MODAL] = NULL;
+		$_SESSION[User::USERDESPERSONFORM] = NULL;
+
+	}
+
+	public static function setUserNrphoneForm($UserNrphoneForm)
+	{
+
+		$_SESSION[User::USERNRPHONEFORM] = $UserNrphoneForm;
+
+	}
+
+	public static function getUserNrphoneForm()
+	{
+
+		$UserNrphoneForm = (isset($_SESSION[User::USERNRPHONEFORM]) && $_SESSION[User::USERNRPHONEFORM]) ? $_SESSION[User::USERNRPHONEFORM] : '';
+
+		User::clearUserNrphoneForm();
+
+		return $UserNrphoneForm;
+
+	}
+
+	public static function clearUserNrphoneForm()
+	{
+
+		$_SESSION[User::USERNRPHONEFORM] = NULL;
+
+	}
+
+	public static function setUserDesemailForm($UserDesemailForm)
+	{
+
+		$_SESSION[User::USERDESEMAILFORM] = $UserDesemailForm;
+
+	}
+
+	public static function getUserDesemailForm()
+	{
+
+		$UserDesemailForm = (isset($_SESSION[User::USERDESEMAILFORM]) && $_SESSION[User::USERDESEMAILFORM]) ? $_SESSION[User::USERDESEMAILFORM] : '';
+
+		User::clearUserDesemailForm();
+
+		return $UserDesemailForm;
+
+	}
+
+	public static function clearUserDesemailForm()
+	{
+
+		$_SESSION[User::USERDESEMAILFORM] = NULL;
 
 	}
 }
