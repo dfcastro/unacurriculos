@@ -83,7 +83,8 @@ class User extends Model {
 
 		$results= $sql->select("SELECT * FROM tb_users a INNER JOIN tb_persons b USING(idperson)
 		INNER JOIN tb_typeusers c using(idtypeuser)
-		 ORDER BY b.desperson;");
+		WHERE idtypeuser= 1
+		 ORDER BY b.desperson ;");
 
 		return $results;
 	}
